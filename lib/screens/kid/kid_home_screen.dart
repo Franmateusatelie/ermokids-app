@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../core/star_manager.dart';
 
+// Telas
 import '../music/music_screen.dart';
-import '../create/paint_screen.dart';
+import '../create/paint_gallery_screen.dart';
 import 'modules/kid_math_screen.dart';
 import 'modules/kid_portuguese_screen.dart';
-import 'modules/kid_dino_egg_screen.dart';
 import 'modules/kid_letters_screen.dart';
 import 'modules/kid_values_screen.dart';
+
+// (Pet virtual entra aqui depois)
+// import '../pet/pet_select_screen.dart';
 
 class KidHomeScreen extends StatefulWidget {
   const KidHomeScreen({super.key});
@@ -36,6 +39,7 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
       backgroundColor: const Color(0xFFE3F2FD),
       appBar: AppBar(
         title: const Text('ErmoKids 🎈'),
+        centerTitle: true,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -54,28 +58,64 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
       body: GridView.count(
         padding: const EdgeInsets.all(16),
         crossAxisCount: 2,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
         children: [
-          _btn(context, Icons.calculate, 'Matemática',
-              const KidMathScreen()),
-          _btn(context, Icons.menu_book, 'Português',
-              const KidPortugueseScreen()),
-          _btn(context, Icons.text_fields, 'Completar Palavras',
-              const KidLettersScreen()),
-          _btn(context, Icons.eco, 'Valores',
-              const KidValuesScreen()),
-          _btn(context, Icons.palette, 'Pintar',
-              const PaintScreen()),
-          _btn(context, Icons.egg_alt, 'Ovinho do Dino',
-              const KidDinoEggScreen()),
-          _btn(context, Icons.music_note, 'Músicas',
-              const MusicScreen()),
+          _btn(
+            context,
+            Icons.calculate,
+            'Matemática',
+            const KidMathScreen(),
+          ),
+          _btn(
+            context,
+            Icons.menu_book,
+            'Português',
+            const KidPortugueseScreen(),
+          ),
+          _btn(
+            context,
+            Icons.text_fields,
+            'Completar Palavras',
+            const KidLettersScreen(),
+          ),
+          _btn(
+            context,
+            Icons.eco,
+            'Valores',
+            const KidValuesScreen(),
+          ),
+          _btn(
+            context,
+            Icons.palette,
+            'Pintar 🎨',
+            const PaintGalleryScreen(),
+          ),
+          _btn(
+            context,
+            Icons.music_note,
+            'Músicas 🎵',
+            const MusicScreen(),
+          ),
+
+          // 🔜 Aqui entra o Pet Virtual (gatinho/cachorrinho)
+          // _btn(context, Icons.pets, 'Meu Amiguinho', const PetSelectScreen()),
         ],
       ),
     );
   }
 
-  Widget _btn(BuildContext context, IconData icon, String label, Widget page) {
+  Widget _btn(
+    BuildContext context,
+    IconData icon,
+    String label,
+    Widget page,
+  ) {
     return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () async {
@@ -83,13 +123,13 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
             context,
             MaterialPageRoute(builder: (_) => page),
           );
-          _loadStars(); // atualiza ao voltar
+          _loadStars(); // atualiza estrelas ao voltar
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 46, color: Colors.deepPurple),
-            const SizedBox(height: 10),
+            Icon(icon, size: 48, color: Colors.deepPurple),
+            const SizedBox(height: 12),
             Text(
               label,
               textAlign: TextAlign.center,
@@ -104,6 +144,7 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
     );
   }
 }
+
 
 
 

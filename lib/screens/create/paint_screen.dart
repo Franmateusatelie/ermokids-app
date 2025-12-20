@@ -1,177 +1,160 @@
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 class PaintScreen extends StatefulWidget {
-  const PaintScreen({super.key});
+  final String drawingAsset;
+
+  const PaintScreen({super.key, required this.drawingAsset});
 
   @override
   State<PaintScreen> createState() => _PaintScreenState();
 }
 
 class _PaintScreenState extends State<PaintScreen> {
-  List<Offset?> points = [];
-  Color selectedColor = Colors.red;
-  String template = '⭐';
+  final List<Offset?> _points = [];
+  Color _selectedColor = Colors.red;
+  double _strokeWidth = 8.0;
 
-  final List<Color> colors = [
+  final List<Color> _colors = [
     Colors.red,
     Colors.blue,
     Colors.green,
     Colors.yellow,
     Colors.orange,
     Colors.purple,
-    Colors.brown,
     Colors.black,
+    Colors.brown,
   ];
 
-  final List<String> templates = ['⭐', '🐶', '🚗'];
+  void _clear() {
+    setState(() {
+      _points.clear();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8E1),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('🎨 Pintar Desenhos'),
+        title: const Text('Pintar 🎨'),
         actions: [
           IconButton(
+            tooltip: 'Limpar',
             icon: const Icon(Icons.delete),
-            onPressed: () => setState(() => points.clear()),
-          ),
+            onPressed: _clear,
+          )
         ],
       ),
       body: Column(
         children: [
-          // Escolher molde
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: templates.map((t) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      template = t;
-                      points.clear();
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: template == t
-                          ? Colors.orangeAccent
-                          : Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.black26),
-                    ),
-                    child: Text(t, style: const TextStyle(fontSize: 28)),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-
-          // Área de desenho
           Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.black26),
-              ),
-              child: GestureDetector(
-                onPanUpdate: (details) {
-                  setState(() {
-                    final box =
-                        context.findRenderObject() as RenderBox;
-                    points.add(
-                      box.globalToLocal(details.globalPosition),
-                    );
-                  });
-                },
-                onPanEnd: (_) => points.add(null),
-                child: CustomPaint(
-                  painter: _Painter(
-                    points: points,
-                    color: selectedColor,
-                    template: template,
+            child: GestureDetector(
+              onPanUpdate: (details) {
+                RenderBox box = context.findRenderObject() as RenderBox;
+                setState(() {
+                  _points.add(box.globalToLocal(details.globalPosition));
+                });
+              },
+              onPanEnd: (_) {
+                _points.add(null);
+              },
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Image.asset(
+                      widget.drawingAsset,
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                  child: Container(),
-                ),
-              ),
-            ),
-          ),
-
-          // Paleta de cores
-          SizedBox(
-            height: 70,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              children: colors.map((c) {
-                return GestureDetector(
-                  onTap: () => setState(() => selectedColor = c),
-                  child: Container(
-                    width: 45,
-                    height: 45,
-                    margin: const EdgeInsets.symmetric(horizontal: 6),
-                    decoration: BoxDecoration(
-                      color: c,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: selectedColor == c
-                            ? Colors.black
-                            : Colors.transparent,
-                        width: 3,
+                  Positioned.fill(
+                    child: CustomPaint(
+                      painter: _PaintPainter(
+                        points: _points,
+                        color: _selectedColor,
+                        strokeWidth: _strokeWidth,
                       ),
                     ),
                   ),
-                );
-              }).toList(),
+                ],
+              ),
             ),
           ),
-          const SizedBox(height: 8),
+
+          Container(
+            height: 90,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.blue.shade50,
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: _colors.map((color) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedColor = color;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 6),
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: color,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: _selectedColor == color
+                                ? Colors.black
+                                : Colors.transparent,
+                            width: 3,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+                Slider(
+                  value: _strokeWidth,
+                  min: 4,
+                  max: 20,
+                  divisions: 4,
+                  label: 'Lápis',
+                  onChanged: (v) {
+                    setState(() => _strokeWidth = v);
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-class _Painter extends CustomPainter {
+class _PaintPainter extends CustomPainter {
   final List<Offset?> points;
   final Color color;
-  final String template;
+  final double strokeWidth;
 
-  _Painter({
+  _PaintPainter({
     required this.points,
     required this.color,
-    required this.template,
+    required this.strokeWidth,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Molde
-    final tp = TextPainter(
-      text: TextSpan(
-        text: template,
-        style: const TextStyle(fontSize: 200),
-      ),
-      textDirection: TextDirection.ltr,
-    );
-    tp.layout();
-    tp.paint(
-      canvas,
-      Offset(
-        (size.width - tp.width) / 2,
-        (size.height - tp.height) / 2,
-      ),
-    );
-
-    // Desenho
     final paint = Paint()
       ..color = color
       ..strokeCap = StrokeCap.round
-      ..strokeWidth = 6;
+      ..strokeWidth = strokeWidth
+      ..isAntiAlias = true;
 
     for (int i = 0; i < points.length - 1; i++) {
       if (points[i] != null && points[i + 1] != null) {
@@ -181,6 +164,9 @@ class _Painter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }
+
+
+
 

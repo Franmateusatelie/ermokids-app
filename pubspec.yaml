@@ -16,6 +16,7 @@ dependencies:
   audioplayers: ^6.5.1
   flutter_local_notifications: ^17.2.4
   timezone: ^0.9.4
+  http: ^1.2.0   # 🔹 para atualizar desenhos sem atualizar o app
 
 dev_dependencies:
   flutter_test:
@@ -28,5 +29,7 @@ flutter:
   assets:
     - assets/images/
     - assets/music/
+    - assets/coloring/
+    - assets/sounds/
 
 
