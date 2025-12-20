@@ -5,6 +5,7 @@ import '../create/paint_screen.dart';
 import 'modules/kid_math_screen.dart';
 import 'modules/kid_portuguese_screen.dart';
 import 'modules/kid_dino_egg_screen.dart';
+import 'modules/kid_letters_screen.dart';
 
 class KidHomeScreen extends StatelessWidget {
   const KidHomeScreen({super.key});
@@ -35,6 +36,14 @@ class KidHomeScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const KidPortugueseScreen()),
+            ),
+          ),
+          _MenuButton(
+            icon: Icons.text_fields,
+            label: 'Completar Palavras',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const KidLettersScreen()),
             ),
           ),
           _MenuButton(
@@ -87,13 +96,13 @@ class _MenuButton extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 48, color: Colors.deepPurple),
+            Icon(icon, size: 46, color: Colors.deepPurple),
             const SizedBox(height: 10),
             Text(
               label,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 16,
+                fontSize: 15,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -103,6 +112,7 @@ class _MenuButton extends StatelessWidget {
     );
   }
 }
+
 
 
 
