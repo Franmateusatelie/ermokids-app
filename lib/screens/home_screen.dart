@@ -8,48 +8,81 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/abc123.png'),
-            fit: BoxFit.cover,
+      body: Stack(
+        children: [
+          // FUNDO
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/abc123.png',
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const SizedBox(height: 40),
-            Image.asset('assets/images/logo.png', height: 80),
 
-            Column(
-              children: [
-                ElevatedButton(
-                  child: const Text('Área da Criança'),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const KidsMenuScreen()));
-                  },
-                ),
-                ElevatedButton(
-                  child: const Text('Área dos Pais'),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => ParentsScreen()));
-                  },
-                ),
-              ],
-            ),
+          // CONTEÚDO
+          Column(
+            children: [
+              const SizedBox(height: 40),
 
-            const Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Ermotech Solutions TI 2025',
-                style: TextStyle(color: Colors.white),
+              // LOGO TOPO
+              Image.asset(
+                'assets/images/logo.png',
+                width: 90, // 🔥 TAMANHO PEQUENO COMO PEDIU
               ),
-            ),
-          ],
-        ),
+
+              const Spacer(),
+
+              // BOTÃO ÁREA DA CRIANÇA
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const KidsMenuScreen(),
+                    ),
+                  );
+                },
+                child: Image.asset(
+                  'assets/images/btn_crianca.png',
+                  width: 260,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              // BOTÃO ÁREA DOS PAIS
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ParentsScreen(),
+                    ),
+                  );
+                },
+                child: Image.asset(
+                  'assets/images/btn_pais.png',
+                  width: 260,
+                ),
+              ),
+
+              const Spacer(),
+
+              // RODAPÉ
+              const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'Ermotech Solutions TI 2025',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
 }
+
