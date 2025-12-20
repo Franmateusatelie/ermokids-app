@@ -11,29 +11,33 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
+    // ⏱️ depois de 2 segundos vai para a seleção
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pushReplacementNamed(context, '/roles');
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/roles');
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: AnimatedScale(
-          scale: 1.0,
-          duration: const Duration(milliseconds: 1200),
-          curve: Curves.elasticOut,
-          child: Image.asset(
-            'assets/images/logo.png',
-            width: 260,
+        child: Text(
+          'ErmoKids 🎈',
+          style: TextStyle(
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
     );
   }
 }
+
+
 
 
 
