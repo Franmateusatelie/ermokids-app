@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-// telas já existentes
+// Telas principais
 import 'screens/splash_screen.dart';
 import 'screens/role_select_screen.dart';
 import 'screens/kid/kid_home_screen.dart';
 import 'screens/parent/parent_home_screen.dart';
-
-// 🐶 novas telas do pet
-import 'screens/pet/pet_select_screen.dart';
-import 'screens/pet/pet_home_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,25 +17,30 @@ class ErmoKidsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ErmoKids',
       debugShowCheckedModeBanner: false,
+      title: 'ErmoKids',
+
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: Colors.green,
       ),
 
-      // 🔹 AQUI FICAM AS ROTAS 🔹
+      // 🔴 ESSENCIAL — NÃO REMOVER
+      initialRoute: '/',
+
       routes: {
         '/': (_) => const SplashScreen(),
+
+        // 👇 ESTA TELA É A DOS BOTÕES
+        // Área da Criança / Área dos Pais
         '/roles': (_) => const RoleSelectScreen(),
+
+        // Áreas internas
         '/kid': (_) => const KidHomeScreen(),
         '/parent': (_) => const ParentHomeScreen(),
-
-        // 🐾 PET VIRTUAL
-        '/petSelect': (_) => const PetSelectScreen(),
-        '/petHome': (_) => const PetHomeScreen(),
       },
     );
   }
 }
+
 
