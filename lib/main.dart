@@ -22,13 +22,18 @@ class ErmoKidsApp extends StatelessWidget {
     return MaterialApp(
       title: 'ErmoKids',
       debugShowCheckedModeBanner: false,
+
+      // 🔥 IMPORTANTE: Splash é a PRIMEIRA tela real
+      home: const SplashScreen(),
+
       theme: ThemeData(
         useMaterial3: true,
-        colorSchemeSeed: const Color(0xFF2ECC71), // verde alegre
+        colorSchemeSeed: const Color(0xFF2ECC71),
         brightness: Brightness.light,
       ),
+
+      // Rotas secundárias
       routes: {
-        '/': (_) => const SplashScreen(),
         '/roles': (_) => const RoleSelectScreen(),
         '/kid': (_) => const KidHomeScreen(),
         '/parentLock': (_) => const ParentLockScreen(),
@@ -48,7 +53,7 @@ class LocalStore {
 
   static Future<String> getParentPin() async {
     final p = await SharedPreferences.getInstance();
-    return p.getString(_pinKey) ?? '1234'; // PIN padrão
+    return p.getString(_pinKey) ?? '1234';
   }
 
   static Future<void> setParentPin(String pin) async {
@@ -66,10 +71,14 @@ class LocalStore {
     return p.getInt(_kidAgeKey) ?? 5;
   }
 
-  static Future<void> setKidProfile({required String name, required int age}) async {
+  static Future<void> setKidProfile({
+    required String name,
+    required int age,
+  }) async {
     final p = await SharedPreferences.getInstance();
     await p.setString(_kidNameKey, name);
     await p.setInt(_kidAgeKey, age);
   }
 }
+
 
