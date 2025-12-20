@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/sound_manager.dart';
 
 class RoleSelectScreen extends StatefulWidget {
   const RoleSelectScreen({super.key});
@@ -35,6 +36,12 @@ class _RoleSelectScreenState extends State<RoleSelectScreen>
     super.dispose();
   }
 
+  Future<void> _navigate(String route) async {
+    await SoundManager.playClick();
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, route);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,24 +74,20 @@ class _RoleSelectScreenState extends State<RoleSelectScreen>
                     childAspectRatio: 1.4,
                     children: [
                       _card(
-                        context,
                         color: Colors.lightBlue.shade300,
                         icon: Icons.child_care,
                         title: 'Área da Criança',
                         subtitle: 'Jogos, letras, números e diversão',
                         emojis: '🔤 🔢 🎮 🎨',
-                        onTap: () =>
-                            Navigator.pushReplacementNamed(context, '/kid'),
+                        onTap: () => _navigate('/kid'),
                       ),
                       _card(
-                        context,
                         color: Colors.green.shade300,
                         icon: Icons.family_restroom,
                         title: 'Área dos Pais',
                         subtitle: 'Rotinas, acompanhamento e controle',
                         emojis: '⏰ 📊 ⭐',
-                        onTap: () =>
-                            Navigator.pushReplacementNamed(context, '/parent'),
+                        onTap: () => _navigate('/parent'),
                       ),
                     ],
                   ),
@@ -97,8 +100,7 @@ class _RoleSelectScreenState extends State<RoleSelectScreen>
     );
   }
 
-  Widget _card(
-    BuildContext context, {
+  Widget _card({
     required Color color,
     required IconData icon,
     required String title,
@@ -155,6 +157,7 @@ class _RoleSelectScreenState extends State<RoleSelectScreen>
     );
   }
 }
+
 
 
 
