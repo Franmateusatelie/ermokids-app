@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'kid/kid_home_screen.dart';
-import 'parent/parent_routines_screen.dart';
 
 class RoleSelectScreen extends StatelessWidget {
   const RoleSelectScreen({super.key});
@@ -8,37 +6,118 @@ class RoleSelectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE3F2FD),
-      appBar: AppBar(
-        title: const Text('Escolha quem vai usar'),
+      backgroundColor: const Color(0xFFFFF8E1),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 30),
+
+            const Text(
+              'ErmoKids 🎈',
+              style: TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 10),
+
+            const Text(
+              'Aprender brincando!',
+              style: TextStyle(fontSize: 18),
+            ),
+
+            const SizedBox(height: 40),
+
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: GridView.count(
+                  crossAxisCount: 1,
+                  mainAxisSpacing: 20,
+                  childAspectRatio: 1.4,
+                  children: [
+                    _card(
+                      context,
+                      color: Colors.lightBlue.shade200,
+                      icon: Icons.child_care,
+                      title: 'Área da Criança',
+                      subtitle: 'Jogos, letras, números e diversão',
+                      emojis: '🔤 🔢 🎮 🎨',
+                      onTap: () =>
+                          Navigator.pushReplacementNamed(context, '/kid'),
+                    ),
+                    _card(
+                      context,
+                      color: Colors.green.shade200,
+                      icon: Icons.family_restroom,
+                      title: 'Área dos Pais',
+                      subtitle: 'Rotinas, acompanhamento e controle',
+                      emojis: '⏰ 📊 ⭐',
+                      onTap: () =>
+                          Navigator.pushReplacementNamed(context, '/parent'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-      body: Center(
+    );
+  }
+
+  Widget _card(
+    BuildContext context, {
+    required Color color,
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required String emojis,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(24),
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            )
+          ],
+        ),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            _BigButton(
-              icon: Icons.child_care,
-              label: 'Área da Criança',
-              color: Colors.blue,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const KidHomeScreen()),
-                );
-              },
+            Icon(icon, size: 80, color: Colors.white),
+            const SizedBox(height: 12),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
-            const SizedBox(height: 20),
-            _BigButton(
-              icon: Icons.family_restroom,
-              label: 'Área dos Pais',
-              color: Colors.green,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => const ParentRoutinesScreen()),
-                );
-              },
+            const SizedBox(height: 8),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              emojis,
+              style: const TextStyle(fontSize: 26),
             ),
           ],
         ),
@@ -47,46 +126,6 @@ class RoleSelectScreen extends StatelessWidget {
   }
 }
 
-class _BigButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final Color color;
-  final VoidCallback onTap;
-
-  const _BigButton({
-    required this.icon,
-    required this.label,
-    required this.color,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        foregroundColor: Colors.white,
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 22),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        textStyle: const TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      onPressed: onTap,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 32),
-          const SizedBox(width: 14),
-          Text(label),
-        ],
-      ),
-    );
-  }
-}
 
 
 
