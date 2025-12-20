@@ -1,7 +1,39 @@
 import 'package:flutter/material.dart';
 
-class RoleSelectScreen extends StatelessWidget {
+class RoleSelectScreen extends StatefulWidget {
   const RoleSelectScreen({super.key});
+
+  @override
+  State<RoleSelectScreen> createState() => _RoleSelectScreenState();
+}
+
+class _RoleSelectScreenState extends State<RoleSelectScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    );
+
+    _scale = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.elasticOut,
+    );
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +43,6 @@ class RoleSelectScreen extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 30),
-
             const Text(
               'ErmoKids 🎈',
               style: TextStyle(
@@ -19,45 +50,44 @@ class RoleSelectScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-
             const SizedBox(height: 10),
-
             const Text(
               'Aprender brincando!',
               style: TextStyle(fontSize: 18),
             ),
-
             const SizedBox(height: 40),
-
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: GridView.count(
-                  crossAxisCount: 1,
-                  mainAxisSpacing: 20,
-                  childAspectRatio: 1.4,
-                  children: [
-                    _card(
-                      context,
-                      color: Colors.lightBlue.shade200,
-                      icon: Icons.child_care,
-                      title: 'Área da Criança',
-                      subtitle: 'Jogos, letras, números e diversão',
-                      emojis: '🔤 🔢 🎮 🎨',
-                      onTap: () =>
-                          Navigator.pushReplacementNamed(context, '/kid'),
-                    ),
-                    _card(
-                      context,
-                      color: Colors.green.shade200,
-                      icon: Icons.family_restroom,
-                      title: 'Área dos Pais',
-                      subtitle: 'Rotinas, acompanhamento e controle',
-                      emojis: '⏰ 📊 ⭐',
-                      onTap: () =>
-                          Navigator.pushReplacementNamed(context, '/parent'),
-                    ),
-                  ],
+              child: ScaleTransition(
+                scale: _scale,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: GridView.count(
+                    crossAxisCount: 1,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 1.4,
+                    children: [
+                      _card(
+                        context,
+                        color: Colors.lightBlue.shade300,
+                        icon: Icons.child_care,
+                        title: 'Área da Criança',
+                        subtitle: 'Jogos, letras, números e diversão',
+                        emojis: '🔤 🔢 🎮 🎨',
+                        onTap: () =>
+                            Navigator.pushReplacementNamed(context, '/kid'),
+                      ),
+                      _card(
+                        context,
+                        color: Colors.green.shade300,
+                        icon: Icons.family_restroom,
+                        title: 'Área dos Pais',
+                        subtitle: 'Rotinas, acompanhamento e controle',
+                        emojis: '⏰ 📊 ⭐',
+                        onTap: () =>
+                            Navigator.pushReplacementNamed(context, '/parent'),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -85,7 +115,7 @@ class RoleSelectScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.15),
+              color: Colors.black.withOpacity(0.2),
               blurRadius: 8,
               offset: const Offset(0, 4),
             )
@@ -125,6 +155,7 @@ class RoleSelectScreen extends StatelessWidget {
     );
   }
 }
+
 
 
 
