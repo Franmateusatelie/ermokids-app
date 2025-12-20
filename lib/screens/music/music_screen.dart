@@ -17,10 +17,17 @@ class _MusicScreenState extends State<MusicScreen> {
     {'title': 'Música Feliz', 'file': 'music/musica1.mp3'},
     {'title': 'Hora de Brincar', 'file': 'music/musica2.mp3'},
     {'title': 'Canção Alegre', 'file': 'music/musica3.mp3'},
-    {'title': 'Especial', 'file': 'music/musica4.mp3'},
-    {'title': 'Animada', 'file': 'music/musica5.mp3'},
-    {'title': 'Alegria', 'file': 'music/musica6.mp3'},
   ];
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// 🔁 quando a música terminar → toca a próxima
+    _player.onPlayerComplete.listen((event) {
+      _next(auto: true);
+    });
+  }
 
   @override
   void dispose() {
@@ -29,6 +36,7 @@ class _MusicScreenState extends State<MusicScreen> {
   }
 
   Future<void> _play() async {
+    await _player.stop();
     await _player.play(
       AssetSource(_musics[_index]['file']!),
     );
@@ -40,9 +48,13 @@ class _MusicScreenState extends State<MusicScreen> {
     setState(() => _playing = false);
   }
 
-  void _next() {
+  void _next({bool auto = false}) {
     _index = (_index + 1) % _musics.length;
     _play();
+
+    if (!auto) {
+      setState(() {});
+    }
   }
 
   void _previous() {
@@ -71,6 +83,7 @@ class _MusicScreenState extends State<MusicScreen> {
 
           Text(
             music['title']!,
+            textAlign: TextAlign.center,
             style: const TextStyle(
               fontSize: 26,
               fontWeight: FontWeight.bold,
@@ -108,4 +121,5 @@ class _MusicScreenState extends State<MusicScreen> {
     );
   }
 }
+
 

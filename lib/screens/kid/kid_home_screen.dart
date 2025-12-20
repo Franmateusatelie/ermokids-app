@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/star_manager.dart';
 
 import '../music/music_screen.dart';
 import '../create/paint_screen.dart';
@@ -8,8 +9,26 @@ import 'modules/kid_dino_egg_screen.dart';
 import 'modules/kid_letters_screen.dart';
 import 'modules/kid_values_screen.dart';
 
-class KidHomeScreen extends StatelessWidget {
+class KidHomeScreen extends StatefulWidget {
   const KidHomeScreen({super.key});
+
+  @override
+  State<KidHomeScreen> createState() => _KidHomeScreenState();
+}
+
+class _KidHomeScreenState extends State<KidHomeScreen> {
+  int stars = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStars();
+  }
+
+  Future<void> _loadStars() async {
+    stars = await StarManager.getStars();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,91 +36,55 @@ class KidHomeScreen extends StatelessWidget {
       backgroundColor: const Color(0xFFE3F2FD),
       appBar: AppBar(
         title: const Text('ErmoKids 🎈'),
-        backgroundColor: Colors.blue,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(
+              child: Text(
+                '⭐ $stars',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
       body: GridView.count(
         padding: const EdgeInsets.all(16),
         crossAxisCount: 2,
         children: [
-          _MenuButton(
-            icon: Icons.calculate,
-            label: 'Matemática',
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const KidMathScreen()),
-            ),
-          ),
-          _MenuButton(
-            icon: Icons.menu_book,
-            label: 'Português',
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const KidPortugueseScreen()),
-            ),
-          ),
-          _MenuButton(
-            icon: Icons.text_fields,
-            label: 'Completar Palavras',
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const KidLettersScreen()),
-            ),
-          ),
-          _MenuButton(
-            icon: Icons.eco,
-            label: 'Valores',
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const KidValuesScreen()),
-            ),
-          ),
-          _MenuButton(
-            icon: Icons.palette,
-            label: 'Pintar',
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const PaintScreen()),
-            ),
-          ),
-          _MenuButton(
-            icon: Icons.egg_alt,
-            label: 'Ovinho do Dino',
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const KidDinoEggScreen()),
-            ),
-          ),
-          _MenuButton(
-            icon: Icons.music_note,
-            label: 'Músicas',
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MusicScreen()),
-            ),
-          ),
+          _btn(context, Icons.calculate, 'Matemática',
+              const KidMathScreen()),
+          _btn(context, Icons.menu_book, 'Português',
+              const KidPortugueseScreen()),
+          _btn(context, Icons.text_fields, 'Completar Palavras',
+              const KidLettersScreen()),
+          _btn(context, Icons.eco, 'Valores',
+              const KidValuesScreen()),
+          _btn(context, Icons.palette, 'Pintar',
+              const PaintScreen()),
+          _btn(context, Icons.egg_alt, 'Ovinho do Dino',
+              const KidDinoEggScreen()),
+          _btn(context, Icons.music_note, 'Músicas',
+              const MusicScreen()),
         ],
       ),
     );
   }
-}
 
-class _MenuButton extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  const _MenuButton({
-    required this.icon,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _btn(BuildContext context, IconData icon, String label, Widget page) {
     return Card(
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
-        onTap: onTap,
+        onTap: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => page),
+          );
+          _loadStars(); // atualiza ao voltar
+        },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -121,6 +104,7 @@ class _MenuButton extends StatelessWidget {
     );
   }
 }
+
 
 
 
