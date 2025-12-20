@@ -10,50 +10,55 @@ class RoleSelectScreen extends StatelessWidget {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // 🔹 FUNDO
+          // 🌈 FUNDO
           Image.asset(
-            'assets/images/bg_abc.png', // imagem de fundo
+            'assets/images/background_abc.png',
             fit: BoxFit.cover,
           ),
 
-          // 🔹 CONTEÚDO CENTRAL
+          // CONTEÚDO
           SafeArea(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
+            child: Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 20),
 
-                // 🔹 LOGO NO TOPO
-                Image.asset(
-                  'assets/images/logo_ermokids.png',
-                  height: 110,
+                    // 🧸 LOGO TOPO
+                    Image.asset(
+                      'assets/images/logo_ermokids.png',
+                      width: 220,
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    // 👶 BOTÃO ÁREA DA CRIANÇA
+                    _imageButton(
+                      context,
+                      image: 'assets/images/btn_crianca.png',
+                      onTap: () async {
+                        await SoundManager.playClick();
+                        Navigator.pushReplacementNamed(context, '/kid');
+                      },
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // 👨‍👩‍👧 BOTÃO ÁREA DOS PAIS
+                    _imageButton(
+                      context,
+                      image: 'assets/images/btn_pais.png',
+                      onTap: () async {
+                        await SoundManager.playClick();
+                        Navigator.pushReplacementNamed(context, '/parent');
+                      },
+                    ),
+
+                    const SizedBox(height: 40),
+                  ],
                 ),
-
-                const Spacer(),
-
-                // 🔹 BOTÃO ÁREA DA CRIANÇA
-                _imageButton(
-                  context,
-                  image: 'assets/images/btn_area_crianca.png',
-                  onTap: () async {
-                    await SoundManager.playClick();
-                    Navigator.pushReplacementNamed(context, '/kid');
-                  },
-                ),
-
-                const SizedBox(height: 24),
-
-                // 🔹 BOTÃO ÁREA DOS PAIS
-                _imageButton(
-                  context,
-                  image: 'assets/images/btn_area_pais.png',
-                  onTap: () async {
-                    await SoundManager.playClick();
-                    Navigator.pushReplacementNamed(context, '/parent');
-                  },
-                ),
-
-                const Spacer(flex: 2),
-              ],
+              ),
             ),
           ),
         ],
@@ -66,18 +71,23 @@ class RoleSelectScreen extends StatelessWidget {
     required String image,
     required VoidCallback onTap,
   }) {
-    return Center(
-      child: InkWell(
-        borderRadius: BorderRadius.circular(24),
-        onTap: onTap,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(24),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.75,
+        constraints: const BoxConstraints(
+          maxWidth: 360,
+        ),
         child: Image.asset(
           image,
-          width: MediaQuery.of(context).size.width * 0.78,
+          fit: BoxFit.contain,
         ),
       ),
     );
   }
 }
+
 
 
 
