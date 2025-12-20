@@ -5,6 +5,26 @@ import 'parents_screen.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  Widget img(String path, {double? width, BoxFit fit = BoxFit.contain}) {
+    return Image.asset(
+      path,
+      width: width,
+      fit: fit,
+      errorBuilder: (context, error, stack) {
+        return Container(
+          width: width ?? double.infinity,
+          padding: const EdgeInsets.all(12),
+          color: Colors.white,
+          child: Text(
+            'ASSET NÃO ENCONTRADO:\n$path',
+            textAlign: TextAlign.center,
+            style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,60 +33,40 @@ class HomeScreen extends StatelessWidget {
           children: [
             // FUNDO
             Positioned.fill(
-              child: Image.asset(
+              child: img(
                 'assets/images/abc123.png',
                 fit: BoxFit.cover,
               ),
             ),
 
-            // CONTEÚDO
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // TOPO - LOGO
+                // LOGO TOPO
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
                   child: Center(
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      width: 90,
-                    ),
+                    child: img('assets/images/logo.png', width: 90),
                   ),
                 ),
 
-                // CENTRO - BOTÕES
+                // BOTÕES
                 Column(
                   children: [
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const KidsMenuScreen(),
-                          ),
-                        );
-                      },
-                      child: Image.asset(
-                        'assets/images/btn_crianca.png',
-                        width: 260,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const KidsMenuScreen()),
                       ),
+                      child: img('assets/images/btn_crianca.png', width: 260),
                     ),
-
                     const SizedBox(height: 24),
-
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => ParentsScreen(),
-                          ),
-                        );
-                      },
-                      child: Image.asset(
-                        'assets/images/btn_pais.png',
-                        width: 260,
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => ParentsScreen()),
                       ),
+                      child: img('assets/images/btn_pais.png', width: 260),
                     ),
                   ],
                 ),
@@ -80,7 +80,7 @@ class HomeScreen extends StatelessWidget {
                     style: TextStyle(
                       color: Colors.black87,
                       fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -92,5 +92,6 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+
 
 
