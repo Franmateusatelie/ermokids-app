@@ -1,6 +1,7 @@
 name: ermokids
-description: ErmoKids - Plataforma Educacional Infantil (Pais + Escolas)
+description: ErmoKids - Plataforma Educacional Infantil
 publish_to: "none"
+
 version: 1.0.0+1
 
 environment:
@@ -9,13 +10,19 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   cupertino_icons: ^1.0.8
-  shared_preferences: ^2.2.3
+  audioplayers: ^6.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
   flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/images/logo.png
+    - assets/audio/intro.mp3
