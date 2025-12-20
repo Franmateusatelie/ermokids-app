@@ -1,162 +1,113 @@
 import 'package:flutter/material.dart';
 import '../core/sound_manager.dart';
 
-class RoleSelectScreen extends StatefulWidget {
+class RoleSelectScreen extends StatelessWidget {
   const RoleSelectScreen({super.key});
-
-  @override
-  State<RoleSelectScreen> createState() => _RoleSelectScreenState();
-}
-
-class _RoleSelectScreenState extends State<RoleSelectScreen>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scale;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    );
-
-    _scale = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.elasticOut,
-    );
-
-    _controller.forward();
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  Future<void> _navigate(String route) async {
-    await SoundManager.playClick();
-    if (!mounted) return;
-    Navigator.pushReplacementNamed(context, route);
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF8E1),
-      body: SafeArea(
-        child: Column(
-          children: [
-            const SizedBox(height: 30),
-            const Text(
-              'ErmoKids 🎈',
-              style: TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
+      body: Stack(
+        children: [
+          // 🔹 FUNDO
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/background_abc.png',
+              fit: BoxFit.cover,
             ),
-            const SizedBox(height: 10),
-            const Text(
-              'Aprender brincando!',
-              style: TextStyle(fontSize: 18),
+          ),
+
+          // 🔹 CAMADA SUAVE (para leitura melhor)
+          Positioned.fill(
+            child: Container(
+              color: Colors.white.withOpacity(0.25),
             ),
-            const SizedBox(height: 40),
-            Expanded(
-              child: ScaleTransition(
-                scale: _scale,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: GridView.count(
-                    crossAxisCount: 1,
-                    mainAxisSpacing: 20,
-                    childAspectRatio: 1.4,
-                    children: [
-                      _card(
-                        color: Colors.lightBlue.shade300,
-                        icon: Icons.child_care,
-                        title: 'Área da Criança',
-                        subtitle: 'Jogos, letras, números e diversão',
-                        emojis: '🔤 🔢 🎮 🎨',
-                        onTap: () => _navigate('/kid'),
-                      ),
-                      _card(
-                        color: Colors.green.shade300,
-                        icon: Icons.family_restroom,
-                        title: 'Área dos Pais',
-                        subtitle: 'Rotinas, acompanhamento e controle',
-                        emojis: '⏰ 📊 ⭐',
-                        onTap: () => _navigate('/parent'),
-                      ),
-                    ],
+          ),
+
+          SafeArea(
+            child: Column(
+              children: [
+                const SizedBox(height: 16),
+
+                // 🔹 LOGO TOPO
+                Image.asset(
+                  'assets/images/logo_ermokids.png',
+                  height: 110,
+                  fit: BoxFit.contain,
+                ),
+
+                const SizedBox(height: 24),
+
+                // 🔹 BOTÕES
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 28),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _imageButton(
+                          context,
+                          image: 'assets/images/btn_area_crianca.png',
+                          onTap: () async {
+                            await SoundManager.playClick();
+                            Navigator.pushReplacementNamed(context, '/kid');
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        _imageButton(
+                          context,
+                          image: 'assets/images/btn_area_pais.png',
+                          onTap: () async {
+                            await SoundManager.playClick();
+                            Navigator.pushReplacementNamed(context, '/parent');
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _card({
-    required Color color,
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required String emojis,
+  Widget _imageButton(
+    BuildContext context, {
+    required String image,
     required VoidCallback onTap,
   }) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(24),
+    return GestureDetector(
       onTap: onTap,
       child: Container(
+        height: 130,
         decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            )
+              color: Colors.black.withOpacity(0.25),
+              blurRadius: 10,
+              offset: const Offset(0, 6),
+            ),
           ],
         ),
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 80, color: Colors.white),
-            const SizedBox(height: 12),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              subtitle,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              emojis,
-              style: const TextStyle(fontSize: 26),
-            ),
-          ],
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: Image.asset(
+            image,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );
   }
 }
+
+
+
+
 
 
 
