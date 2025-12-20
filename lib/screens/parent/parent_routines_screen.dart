@@ -14,7 +14,7 @@ class _ParentRoutinesScreenState extends State<ParentRoutinesScreen> {
   final TextEditingController _controller = TextEditingController();
   TimeOfDay? _time;
 
-  List<Map<String, int>> routines = [];
+  List<Map<String, dynamic>> routines = [];
 
   @override
   void initState() {
@@ -24,12 +24,13 @@ class _ParentRoutinesScreenState extends State<ParentRoutinesScreen> {
 
   Future<void> _load() async {
     final p = await SharedPreferences.getInstance();
-    final list = p.getStringList('routines_v2') ?? [];
+    final list = p.getStringList('routines_v3') ?? [];
 
     setState(() {
       routines = list.map((e) {
         final parts = e.split('|');
         return {
+          'title': parts[0],
           'hour': int.parse(parts[1]),
           'minute': int.parse(parts[2]),
         };
@@ -40,41 +41,50 @@ class _ParentRoutinesScreenState extends State<ParentRoutinesScreen> {
   Future<void> _save() async {
     final p = await SharedPreferences.getInstance();
     final list = routines
-        .map((r) => '${_controller.text}|${r['hour']}|${r['minute']}')
+        .map((r) => '${r['title']}|${r['hour']}|${r['minute']}')
         .toList();
-    await p.setStringList('routines_v2', list);
+    await p.setStringList('routines_v3', list);
   }
 
   Future<void> _addRoutine() async {
-    if (_controller.text.isEmpty || _time == null) return;
+    if (_controller.text.trim().isEmpty || _time == null) return;
+
+    final routine = {
+      'title': _controller.text.trim(),
+      'hour': _time!.hour,
+      'minute': _time!.minute,
+    };
+
+    routines.add(routine);
+    await _save();
 
     final now = DateTime.now();
-    final date = DateTime(
+    final dateTime = DateTime(
       now.year,
       now.month,
       now.day,
-      _time!.hour,
-      _time!.minute,
+      routine['hour'] as int,
+      routine['minute'] as int,
     );
 
-    await NotificationService.scheduleNotification(
+    // 🔔 Notificação (modo estável para APK de teste)
+    NotificationService.scheduleInApp(
       id: DateTime.now().millisecondsSinceEpoch ~/ 1000,
       title: '⏰ Hora da rotina',
-      body: _controller.text.trim(),
-      dateTime: date,
+      body: routine['title'],
+      dateTime: dateTime,
     );
-
-    routines.add({
-      'hour': _time!.hour,
-      'minute': _time!.minute,
-    });
-
-    await _save();
 
     _controller.clear();
     _time = null;
 
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -122,6 +132,7 @@ class _ParentRoutinesScreenState extends State<ParentRoutinesScreen> {
                         )
                       ],
                     ),
+                    const SizedBox(height: 8),
                     ElevatedButton(
                       onPressed: _addRoutine,
                       child: const Text('Adicionar rotina'),
@@ -130,12 +141,31 @@ class _ParentRoutinesScreenState extends State<ParentRoutinesScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView.builder(
+                itemCount: routines.length,
+                itemBuilder: (context, index) {
+                  final r = routines[index];
+                  return Card(
+                    child: ListTile(
+                      leading: const Icon(Icons.alarm),
+                      title: Text(r['title']),
+                      subtitle: Text(
+                        'Horário: ${r['hour']}:${r['minute'].toString().padLeft(2, '0')}',
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
+
 
 
 
