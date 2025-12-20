@@ -9,8 +9,8 @@ import 'modules/kid_portuguese_screen.dart';
 import 'modules/kid_letters_screen.dart';
 import 'modules/kid_values_screen.dart';
 
-// (Pet virtual entra aqui depois)
-// import '../pet/pet_select_screen.dart';
+// 🐶🐱 Pet
+import '../pet/pet_select_screen.dart';
 
 class KidHomeScreen extends StatefulWidget {
   const KidHomeScreen({super.key});
@@ -61,56 +61,28 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
         children: [
-          _btn(
-            context,
-            Icons.calculate,
-            'Matemática',
-            const KidMathScreen(),
-          ),
-          _btn(
-            context,
-            Icons.menu_book,
-            'Português',
-            const KidPortugueseScreen(),
-          ),
-          _btn(
-            context,
-            Icons.text_fields,
-            'Completar Palavras',
-            const KidLettersScreen(),
-          ),
-          _btn(
-            context,
-            Icons.eco,
-            'Valores',
-            const KidValuesScreen(),
-          ),
-          _btn(
-            context,
-            Icons.palette,
-            'Pintar 🎨',
-            const PaintGalleryScreen(),
-          ),
-          _btn(
-            context,
-            Icons.music_note,
-            'Músicas 🎵',
-            const MusicScreen(),
-          ),
+          _btn(context, Icons.calculate, 'Matemática',
+              const KidMathScreen()),
+          _btn(context, Icons.menu_book, 'Português',
+              const KidPortugueseScreen()),
+          _btn(context, Icons.text_fields, 'Completar Palavras',
+              const KidLettersScreen()),
+          _btn(context, Icons.eco, 'Valores',
+              const KidValuesScreen()),
+          _btn(context, Icons.palette, 'Pintar 🎨',
+              const PaintGalleryScreen()),
+          _btn(context, Icons.music_note, 'Músicas 🎵',
+              const MusicScreen()),
 
-          // 🔜 Aqui entra o Pet Virtual (gatinho/cachorrinho)
-          // _btn(context, Icons.pets, 'Meu Amiguinho', const PetSelectScreen()),
+          // 🐶🐱 PET VIRTUAL
+          _btn(context, Icons.pets, 'Meu Amiguinho 🐾',
+              const PetSelectScreen()),
         ],
       ),
     );
   }
 
-  Widget _btn(
-    BuildContext context,
-    IconData icon,
-    String label,
-    Widget page,
-  ) {
+  Widget _btn(BuildContext context, IconData icon, String label, Widget page) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -123,7 +95,7 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
             context,
             MaterialPageRoute(builder: (_) => page),
           );
-          _loadStars(); // atualiza estrelas ao voltar
+          _loadStars();
         },
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -144,6 +116,7 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
     );
   }
 }
+
 
 
 
