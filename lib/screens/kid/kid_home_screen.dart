@@ -9,7 +9,7 @@ import 'modules/kid_portuguese_screen.dart';
 import 'modules/kid_letters_screen.dart';
 import 'modules/kid_values_screen.dart';
 
-// 🐶🐱 PET
+// Pet
 import '../pet/pet_select_screen.dart';
 
 class KidHomeScreen extends StatefulWidget {
@@ -36,79 +36,145 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE3F2FD),
-      appBar: AppBar(
-        title: const Text('ErmoKids 🎈'),
-        centerTitle: true,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Text(
-                '⭐ $stars',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          )
-        ],
-      ),
-      body: GridView.count(
-        padding: const EdgeInsets.all(16),
-        crossAxisCount: 2,
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
+      body: Stack(
         children: [
-          _btn(context, Icons.calculate, 'Matemática',
-              const KidMathScreen()),
-          _btn(context, Icons.menu_book, 'Português',
-              const KidPortugueseScreen()),
-          _btn(context, Icons.text_fields, 'Completar Palavras',
-              const KidLettersScreen()),
-          _btn(context, Icons.eco, 'Valores',
-              const KidValuesScreen()),
-          _btn(context, Icons.palette, 'Pintar 🎨',
-              const PaintGalleryScreen()),
-          _btn(context, Icons.music_note, 'Músicas 🎵',
-              const MusicScreen()),
+          // 🌈 FUNDO
+          Positioned.fill(
+            child: Image.asset(
+              'assets/images/bg_kids.png',
+              fit: BoxFit.cover,
+            ),
+          ),
 
-          // 🐾 BOTÃO DO PET (OBRIGATÓRIO)
-          _btn(context, Icons.pets, 'Meu Amiguinho 🐾',
-              const PetSelectScreen()),
+          SafeArea(
+            child: Column(
+              children: [
+                // 🔝 TOPO COM BOTÃO HOME E ESTRELAS
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // 🏠 BOTÃO HOME
+                      IconButton(
+                        icon: const Icon(Icons.home, size: 32),
+                        color: Colors.deepPurple,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/roles');
+                        },
+                      ),
+
+                      // ⭐ ESTRELAS
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.85),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          '⭐ $stars',
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // 🎮 BOTÕES DOS JOGOS
+                Expanded(
+                  child: GridView.count(
+                    padding: const EdgeInsets.all(20),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    children: [
+                      _gameBtn(context, Icons.calculate, 'Matemática', const KidMathScreen()),
+                      _gameBtn(context, Icons.menu_book, 'Português', const KidPortugueseScreen()),
+                      _gameBtn(context, Icons.text_fields, 'Completar Palavras', const KidLettersScreen()),
+                      _gameBtn(context, Icons.eco, 'Valores', const KidValuesScreen()),
+                      _gameBtn(context, Icons.palette, 'Pintar 🎨', const PaintGalleryScreen()),
+                      _gameBtn(context, Icons.music_note, 'Músicas 🎵', const MusicScreen()),
+
+                      // 🐾 BOTÃO COM IMAGEM – MEU AMIGUINHO
+                      _imageBtn(
+                        context,
+                        'assets/images/btn_pet.png',
+                        'Meu Amiguinho',
+                        const PetSelectScreen(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 
-  Widget _btn(BuildContext context, IconData icon, String label, Widget page) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: () async {
-          await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => page),
-          );
-          _loadStars();
-        },
+  // 🔘 BOTÃO PADRÃO
+  Widget _gameBtn(BuildContext context, IconData icon, String label, Widget page) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(24),
+      onTap: () async {
+        await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+        _loadStars();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: const [
+            BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 4)),
+          ],
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: 48, color: Colors.deepPurple),
-            const SizedBox(height: 12),
+            Icon(icon, size: 46, color: Colors.deepPurple),
+            const SizedBox(height: 10),
             Text(
               label,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // 🖼 BOTÃO COM IMAGEM (PET)
+  Widget _imageBtn(BuildContext context, String image, String label, Widget page) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(24),
+      onTap: () async {
+        await Navigator.push(context, MaterialPageRoute(builder: (_) => page));
+        _loadStars();
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.95),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: const [
+            BoxShadow(color: Colors.black26, blurRadius: 6, offset: Offset(0, 4)),
+          ],
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(image, height: 90, fit: BoxFit.contain),
+            const SizedBox(height: 8),
+            Text(
+              label,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -116,6 +182,7 @@ class _KidHomeScreenState extends State<KidHomeScreen> {
     );
   }
 }
+
 
 
 
