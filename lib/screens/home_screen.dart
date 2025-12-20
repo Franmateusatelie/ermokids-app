@@ -8,81 +8,89 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          // FUNDO
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/abc123.png',
-              fit: BoxFit.cover,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // FUNDO
+            Positioned.fill(
+              child: Image.asset(
+                'assets/images/abc123.png',
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
 
-          // CONTEÚDO
-          Column(
-            children: [
-              const SizedBox(height: 40),
-
-              // LOGO TOPO
-              Image.asset(
-                'assets/images/logo.png',
-                width: 90, // 🔥 TAMANHO PEQUENO COMO PEDIU
-              ),
-
-              const Spacer(),
-
-              // BOTÃO ÁREA DA CRIANÇA
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const KidsMenuScreen(),
+            // CONTEÚDO
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // TOPO - LOGO
+                Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/logo.png',
+                      width: 90,
                     ),
-                  );
-                },
-                child: Image.asset(
-                  'assets/images/btn_crianca.png',
-                  width: 260,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // BOTÃO ÁREA DOS PAIS
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ParentsScreen(),
-                    ),
-                  );
-                },
-                child: Image.asset(
-                  'assets/images/btn_pais.png',
-                  width: 260,
-                ),
-              ),
-
-              const Spacer(),
-
-              // RODAPÉ
-              const Padding(
-                padding: EdgeInsets.only(bottom: 12),
-                child: Text(
-                  'Ermotech Solutions TI 2025',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 12,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ],
+
+                // CENTRO - BOTÕES
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const KidsMenuScreen(),
+                          ),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/btn_crianca.png',
+                        width: 260,
+                      ),
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => ParentsScreen(),
+                          ),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/btn_pais.png',
+                        width: 260,
+                      ),
+                    ),
+                  ],
+                ),
+
+                // RODAPÉ
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 12),
+                  child: Text(
+                    'Ermotech Solutions TI 2025',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
 
