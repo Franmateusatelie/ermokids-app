@@ -10,77 +10,68 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _c;
-  late final Animation<double> _scale;
-  late final Animation<double> _fade;
+  late AnimationController _controller;
+  late Animation<double> _scale;
 
   @override
   void initState() {
     super.initState();
 
-    _c = AnimationController(
+    _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 900),
+      duration: const Duration(milliseconds: 1200),
     );
 
-    _scale = CurvedAnimation(parent: _c, curve: Curves.elasticOut);
-    _fade = CurvedAnimation(parent: _c, curve: Curves.easeIn);
+    _scale = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.elasticOut,
+    );
 
-    _c.forward();
+    _controller.forward();
 
-    // Splash curto e estável (para APK/Codemagic)
-    Timer(const Duration(milliseconds: 1600), () {
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/roles');
+    // ⏱️ Tempo da splash
+    Timer(const Duration(seconds: 2), () {
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/roles');
+      }
     });
   }
 
   @override
   void dispose() {
-    _c.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFFFFF9C4), Color(0xFFE1F5FE)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-        ),
-        child: Center(
-          child: FadeTransition(
-            opacity: _fade,
-            child: ScaleTransition(
-              scale: _scale,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // SUA LOGO
-                  Image.asset(
-                    'assets/images/logo.png',
-                    width: 260,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Aprender brincando!',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ],
+      backgroundColor: const Color(0xFFFFF3E0), // fundo alegre
+      body: Center(
+        child: ScaleTransition(
+          scale: _scale,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/logo.png',
+                width: 260,
               ),
-            ),
+              const SizedBox(height: 24),
+              const Text(
+                'Aprender brincando é mais divertido!',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF4CAF50),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 }
+
 
