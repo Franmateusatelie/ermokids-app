@@ -2,8 +2,9 @@ workflows:
   ermokids_android_build:
     name: ErmoKids Android Build (Free)
     max_build_duration: 60
+
     environment:
-      node: 18
+      node: 20
       java: 17
 
     scripts:
@@ -27,4 +28,5 @@ workflows:
 
     artifacts:
       - android/app/build/outputs/**/*.apk
+
 
