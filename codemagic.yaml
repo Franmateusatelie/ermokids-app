@@ -5,19 +5,19 @@ workflows:
 
     environment:
       node: latest
-      java: 17
+      java: 21
 
     scripts:
-      - name: Check Node version
+      - name: Check versions
         script: |
           node -v
-          npm -v
+          java -version
 
       - name: Install dependencies
         script: |
           npm install
 
-      - name: Install Capacitor CLI (compatible)
+      - name: Install Capacitor CLI
         script: |
           npm install -D @capacitor/cli@latest
 
@@ -37,4 +37,5 @@ workflows:
 
     artifacts:
       - android/app/build/outputs/**/*.apk
+
 
